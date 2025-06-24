@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FiXCircle } from "react-icons/fi";
 import { useParams } from "react-router-dom";
 
 function EnrolledStudents() {
@@ -6,6 +7,8 @@ function EnrolledStudents() {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState("")
+  const [show, setShow] = useState(false)
+  const [img, setImg] = useState("");
 
   useEffect(() => {
     const fetchEnrolled = async () => {
@@ -57,14 +60,27 @@ function EnrolledStudents() {
   }
 };
 
+const showImage = (img) =>{
+    setImg(img)
+    setShow(true);
+}
+
 
   if (loading) return <div className="p-4">Loading...</div>;
 
   if (!students.length) return <div className="p-4 text-gray-500">No students enrolled yet.</div>;
 
   return (
-    <div className='px-5 lg:px-45'>
-      <div className="w-full lg:w-3/4 mx-auto mb-5 mt-5">
+    <div className='px-5 lg:px-45 '>
+      <div className="w-full lg:w-3/4 mx-auto mb-5 mt-5 relative">
+        <div className={`${show ?'block' : 'hidden'} absolute w-full bg-white h-[500px] p-5 rounded-md border `}>
+        <div className="flex justify-between ">
+            <h3>Payment Image</h3>
+            <div><FiXCircle size={30} onClick={()=>setShow(false)}/></div>
+        
+        </div>
+        <img src={img} className="w-full mt-5" alt="" />
+        </div>
       <h2 className="text-2xl font-bold mb-6 mt-15">Enrolled Students for {name}</h2>
         <div className="mb-3 text-xl">Total Students: {students?.length}</div>
       <div className="grid gap-4">
@@ -106,6 +122,7 @@ function EnrolledStudents() {
                   src={enroll.payment_image}
                   alt="payment proof"
                   className="w-32 border rounded-md"
+                  onClick={()=>showImage(enroll.payment_image)}
                 />
               </div>
             )}
