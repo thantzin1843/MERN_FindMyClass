@@ -4,11 +4,9 @@ import { FaDiamond } from 'react-icons/fa6'
 import { GiTeacher } from 'react-icons/gi'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
-import ImageModal from '../components/ImageModal'
-const contents = [
-    "html","CSS",'JAVASCRIPT','REACT','NODEJS','MONGODB','MYSQL'
-]
-function CourseDetail() {
+import ImageModal from '../../components/ImageModal'
+
+function InstituteCourseDetail() {
     const {id} = useParams();
     const [course, setCourse] = useState([])
     const navigate = useNavigate()
@@ -35,19 +33,36 @@ function CourseDetail() {
             return `${hour}:${minute}${ampm}`;
         }
 
-        const navigateEnrollPage = (id) =>{
-            if(localStorage.getItem("userInfo")){
-                navigate(`/courses/${id}/enroll`)
-            }else{
-                navigate('/login')
-            }
+        const changeCourseStatus = async(status, id) =>{
+             try {
+                            const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/course/changeStatus`,{
+                              method:'put',
+                              headers:{
+                                'Content-Type':'application/json',
+                                'authorization':`Bearer ${localStorage.getItem('token')}`
+                              },
+                              body:JSON.stringify({status:status,id:id})
+                            });
+                            const data = await res.json();
+                    } catch (error) {
+                      toast.error(error.message)
+                    }
         }
   return (
-    <div className='px-5 lg:px-20'>
+    <div className='px-5 lg:px-30 pt-10'>
         <div className='w-full lg:w-2/3 mx-auto'>
-            <div className="flex items-center gap-2 ">
+            <div className="flex items-center justify-between gap-2 ">
+                <div className='flex gap-2 items-center'>
                 <img src={course?.institute_id?.logo} className='w-15 shadow-lg border border-gray-200 rounded-full h-15 ' alt="" />
                 <div className='text-xl'>{course?.institute_id?.name}</div>
+                </div>
+
+                 <select name="" id="" onChange={(e)=>changeCourseStatus(e.target.value,course?._id)}>
+                        <option value="upcoming" selected={course?.status == "upcoming"}>Upcoming</option>
+                        <option value="inactive" selected={course?.status == "inactive"}>Inactive</option>
+                        <option value="active" selected={course?.status == "active"}>Active</option>
+                        <option value="completed" selected={course?.status == "completed"}>Completed</option>
+                </select>
             </div>
 
             {/* <div className="w-full md:w-full mt-5">
@@ -121,12 +136,12 @@ function CourseDetail() {
                 </div>
             </div>
 
-            <button onClick={()=>navigateEnrollPage(course?._id)} className='bg-black text-white p-2 rounded-md w-full lg:w-1/3 my-10'>
-                Enroll
+            <button onClick={()=>navigate(`/courses/${course?._id}/enroll`)} className='bg-red-500 text-white p-2 rounded-md w-full lg:w-1/3 my-10'>
+                Delete
             </button>
         </div>
     </div>
   )
 }
 
-export default CourseDetail
+export default InstituteCourseDetail

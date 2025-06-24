@@ -1,20 +1,36 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 function CourseCard({course}) {
+    const navigate = useNavigate()
+      function convertTo12Hour(time24) {
+            const [hourStr, minute] = time24.split(':');
+            let hour = parseInt(hourStr, 10);
+            const ampm = hour >= 12 ? ' PM' : ' AM';
+            hour = hour % 12 || 12; // convert 0 to 12 for 12 AM
+            return `${hour}:${minute}${ampm}`;
+        }
+
+        const navigateEnrollPage = (id) =>{
+            if(localStorage.getItem("userInfo")){
+                navigate(`/courses/${id}/enroll`)
+            }else{
+                navigate('/login')
+            }
+        }
   return (
-    <Link to={`/courses/${course?._id}`}>
-        <div className='relative min-w-[100%] sm:min-w-[35%] lg:min-w-[25%] border border-gray-300'>
+      <div className='relative min-w-[100%] sm:min-w-[35%] lg:min-w-[25%] border border-gray-300'>
+            <Link to={`/courses/${course?._id}`}>
                         <div className="w-full h-[200px]">
                             <img src={course?.images?.[0]} className='w-full h-full object-cover' alt="" />
                         </div>
-
+                </Link>
                        <div className="p-3 space-y-1">
-                            <div className='line-clamp-2 font-semibold'>
+                            <div className='line-clamp-2 font-bold text-xl'>
                                 {course?.name}
                             </div>
                             <div className=' text-gray-800'>
-                                By <span className='font-bold'>{course?.instructor?.name}</span>
+                                <span className=''>{course?.instructor?.name}</span>
                             </div>
                             <div className="flex gap-2">
                                 <div className='font-bold'>
@@ -24,16 +40,20 @@ function CourseCard({course}) {
                                     {course?.original_fee} Ks
                                 </div>
                             </div>
-                            <button className='bg-black text-white py-1 px-5 rounded-md'>Enroll Now</button>
+                           <div className="mt-3">
+                             <button onClick={()=>navigateEnrollPage(course?._id)} className='bg-black text-white py-2 px-5  rounded-md'>Enroll Now</button>
+                           </div>
                        </div>
 
                        <div className="absolute flex top-0 left-0 justify-between w-full items-center">
-                        <img src={course?.institute_id?.logo} className='w-12 h-12' alt="" />
+                        <img src={course?.instructor?.logo} className='w-12 h-12' alt="" />
         
-                       <div className='bg-orange-500 px-2'>12-June-2025</div>
+                       <div className='bg-orange-500 px-2'>
+                        {course?.start_date && new Date(course?.start_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '').split(' ').join('-')}
+                       </div>
                        </div>
                     </div>
-    </Link>
+  
   )
 }
 

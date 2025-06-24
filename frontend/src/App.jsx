@@ -23,6 +23,11 @@ import { Toaster } from "sonner"
 import AdminLayout from "./pages/admin/AdminLayout"
 import AdminDashboard from "./pages/admin/AdminDashboard"
 import InstitutePending from "./pages/institute/InstitutePending"
+import EnrollPage from "./pages/EnrollPage"
+import AdminSchoolDetail from "./pages/admin/AdminSchoolDetail"
+import InstituteCourseDetail from "./pages/institute/InstituteCourseDetail"
+import EnrolledCourseList from "./pages/EnrolledCourseList"
+import EnrolledStudents from "./pages/institute/EnrolledStudents"
 
 function App() {
   return (
@@ -34,6 +39,7 @@ function App() {
           <Route path="/" index element={<Home/>}/>
           <Route path="schools" element={<SchoolListPage/>}/>
           <Route path="courses" element={<CourseListPage/>}/>
+          <Route path="enrolled_courses" element={<EnrolledCourseList/>}/>
           <Route path="register" element={<Signup/>}/>
           <Route path="login" element={<Login/>}/>
           <Route path="schools/:id" element={<SchoolDetail/>}/>
@@ -41,7 +47,8 @@ function App() {
           <Route path="institute/login" element={<InstituteLogin/>}/>
           <Route path="institute/signup1" element={<InstituteSignup/>}/>
           <Route path="institute/signup2" element={<InstituteSignup2/>}/>
-           <Route path="institute/pending" element={<InstitutePending/>}/>
+          <Route path="institute/pending" element={<InstitutePending/>}/>
+          <Route path="/courses/:id/enroll" element={<EnrollPage/>}/>
         </Route>
 
           {/* institute */}
@@ -49,16 +56,19 @@ function App() {
             <Route path="profile" element={<Profile/>}/>
             <Route path="members" element={<Members/>}/>
             <Route path="courses" element={<Courses/>}/>
+            <Route path="courses/:id" element={<InstituteCourseDetail/>}/>
             <Route path="create/course" element={<CreateCoursePage/>}/>
             <Route path="reviews" element={<Reviews/>}/>
             <Route path="dashboard" element={<Dashboard/>}/>
             <Route path="profile/editPage" element={<EditProfilePage/>}/>
             <Route path="members/createPage" element={<CreateMember/>}/>
+            <Route path="courses/:id/enrolled_students" element={<EnrolledStudents/>}/>
         </Route>
 
         {/* admin */}
         <Route path="/admin" element={<AdminLayout/>}>
             <Route path="dashboard" element={<AdminDashboard/>}/>
+             <Route path="schools/:id" element={<AdminSchoolDetail/>}/>
         </Route>
 
       </Routes>

@@ -5,22 +5,21 @@ import { Link } from 'react-router-dom'
 import CourseCard from './CourseCard';
 
 function PopularCourses() {
-    const [arrivals, setArrivals] = useState([]);
-
-
-    const fetchNewArrivals = async() =>{
-        try {
-            const response = await fetch(`http://localhost:9000/api/products/new-arrivals`);
-            const data  = await response.json()
-            setArrivals(data)
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
-    useEffect(()=>{
-        fetchNewArrivals()
-        
-    },[])
+    const [courses, setCourses] = useState([])
+       const fetchCourses = async() =>{
+           try {
+                const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/course`);
+                const data = await res.json();
+                console.log(data);
+                setCourses(data);
+            } catch (error) {
+               toast.error(error.message)
+            }
+       }
+    
+       useEffect(()=>{
+          fetchCourses()
+       },[])
     // for scroll indicator
     const scrollRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
@@ -43,12 +42,6 @@ function PopularCourses() {
             setCanScrollLeft(leftScroll > 0);
             setCanScrollRight(rightScroll)
         }
-        // console.log({
-        //     scrollLeft:container.scrollLeft,
-        //     clientWidth: container.clientWidth,
-        //     containerScrollWidth : container.scrollWidth,
-        //     offsetLeft: scrollRef.current.offsetLeft
-        // })
     }
 
     const handleMouseDown = (e) =>{
@@ -78,7 +71,7 @@ function PopularCourses() {
   return (
     <section className=' md:px-0 my-5'>
         <div className="container  mx-auto text-center mb-15 relative">
-            <h2 className="text-3xl font-bold">Popular Courses</h2>
+            <h2 className="text-3xl font-bold">Latest Courses</h2>
             {/* scroll button */}
             <div className='absolute right-0 bottom-[-45px] flex space-x-2'>
                 <button disabled={!canScrollLeft} onClick={()=>scroll("left")} className={`p-2 rounded border bg-white text-black ${canScrollLeft ? "bg-white text-black": "bg-gray-200 text-gray-400"}`}>
@@ -100,24 +93,13 @@ function PopularCourses() {
         onMouseLeave={handleMouseUpOrLeave}
          ref={scrollRef} className={`hideIndi container px-5 md:px-12 mx-auto overflow-x-scroll flex space-x-3 relative ${isDragging ? " cursor-grabbing": "cursor-grab"}`}>
             {
-                [1,2,3,4,5,6,7]?.map((product,index)=>(
-                    //  <Link key={index} className='min-w-[100%] sm:min-w-[35%] lg:min-w-[20%] relative'  to={`/products/${product._id}`}>
-                    //     <div >
-                    //     <img draggable={false} className='select-none w-full h-[300px] object-cover rounded-lg' src={product.images[0]} alt="" />
-                    //     <div  className=' absolute bottom-0 left-0 right-0 bg-opacity-50 backdrop-blur-md text-white p-4 rounded-b-lg
-                    //     '>
-                    //         <Link to={`/products/${product._id}`} className='block'><h4 className='font-medium'>{product.name}</h4></Link>
-                    //         <p className='mt-1 '>$ {product.hasVariants ? product?.variants[0]?.price : product?.price}</p>
-                    //     </div>
-                    //  </div>   
-                    //  </Link>
-
-                     <CourseCard/>
+                courses?.map((course,index)=>(
+                     <CourseCard course={course} key={index}/>
                 ))
             }
 
             <div className='relative min-w-[100%] sm:min-w-[35%] lg:min-w-[25%] border border-gray-300 bg-gray-200 flex justify-center items-center'>
-                      <button className='bg-black py-2 px-5 rounded-md text-white'>Explore!</button>
+                <Link to={'/courses'} className='bg-black py-2 px-5 rounded-md text-white'>Explore!</Link>
             </div>
             
         </div>

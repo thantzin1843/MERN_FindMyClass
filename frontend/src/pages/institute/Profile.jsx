@@ -5,19 +5,6 @@ import { MdEmail, MdPhoto } from 'react-icons/md'
 import ImageModal from '../../components/ImageModal'
 import { Link } from 'react-router-dom'
 
-const contacts = [
-  { name: "Facebook", link: "https://www.facebook.com" },
-  { name: "Instagram", link: "https://www.instagram.com" },
-  { name: "WhatsApp", link: "https://www.whatsapp.com" },
-  { name: "Telegram", link: "https://web.telegram.org" },
-  { name: "Viber", link: "https://www.viber.com" },
-//   { name: "Messenger", link: "https://www.messenger.com" },
-//   { name: "Snapchat", link: "https://www.snapchat.com" },
-//   { name: "Twitter (X)", link: "https://www.twitter.com" },
-//   { name: "LinkedIn", link: "https://www.linkedin.com" },
-//   { name: "Signal", link: "https://signal.org" }
-];
-
 function Profile() {
     const [profile, setProfile] = useState({})
     const instituteInfo = JSON.parse(localStorage.getItem('instituteInfo'))
@@ -95,14 +82,18 @@ function Profile() {
             <div className="text-xl">Contact</div>
             <table className='w-full '>
                 {
-                    contacts?.map((c,index)=>(
-                        <tr className='' key={index}>
-                            <td className='py-2'>{c.name}</td>
-                            <td className='py-2 underline'>
-                                <Link to={c.link}>{c.link}</Link>
-                            </td>
-                        </tr>
-                    ))
+                    profile?.contact?.length > 0 ? (
+                        profile?.contact?.map((c,index)=>(
+                            <tr className='' key={index}>
+                                <td className='py-2'>{c.name}</td>
+                                <td className='py-2 underline'>
+                                    <Link to={c.link}>{c.link}</Link>
+                                </td>
+                            </tr>
+                        ))
+                    ) :(
+                        <div>No contact information yet.</div>
+                    )
                 }
                
             </table>

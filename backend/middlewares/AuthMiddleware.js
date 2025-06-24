@@ -9,7 +9,8 @@ export const protectAccess = async(req,res,next) =>{
            try {
                 token = req.headers.authorization.split(" ")[1];
                 const decoded = jwt.verify(token,process.env.JWT_SECRET);
-                req.user = await User.findById(decoded?.user?._id).select("-password")
+                req.user = await User.findById(decoded?.user?.id).select("-password")
+                console.log(decoded)
                 next();
            } catch (error) {
                 res.json({
@@ -25,6 +26,7 @@ export const protectAccess = async(req,res,next) =>{
 
 // admin only
 export const adminOnly = async(req, res,next) =>{
+    console.log(req.user)
     if(req.user && req.user.role == "admin" ){
         next()
     }else{

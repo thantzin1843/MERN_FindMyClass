@@ -1,14 +1,19 @@
 import React, { useState } from 'react'
+import { BiLogOut } from 'react-icons/bi'
 import { CgProfile } from 'react-icons/cg'
 import { CiMenuBurger } from 'react-icons/ci'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 
 function Navbar() {
     const [open, setOpen] = useState(false)
+    const navigate = useNavigate()
+    const handleSignOut = () =>{
+      localStorage.removeItem("token")
+      localStorage.removeItem("userInfo")
+      navigate('/')
+    }
   return (
     <div>
-        {/* <div className='text-center py-3 '>Start Your Training Journey Today!</div> */}
-
         {/* navbar for desktop */}
         <div className="flex justify-between px-5 md:px-15 items-center h-[75px]">
             <div className="logo text-xl md:text-3xl">
@@ -19,11 +24,14 @@ function Navbar() {
                 <Link to={'/schools'}>Training School</Link>
                 <Link to={'/courses'}>Courses</Link>
 
-                
-                <button  id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar" class="inline text-sm bg-gray-800 rounded-full md:me-0" type="button">
-                <span class="sr-only">Open user menu</span>
-                <img class="w-8 h-8 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnFRPx77U9mERU_T1zyHcz9BOxbDQrL4Dvtg&s" alt="user photo"/>
-                </button>
+                {
+                    (localStorage.getItem('userInfo') && localStorage.getItem('token')) && (
+                        <button  id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar" class="inline text-sm bg-gray-800 rounded-full md:me-0" type="button">
+                        <span class="sr-only">Open user menu</span>
+                        <img class="w-8 h-8 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnFRPx77U9mERU_T1zyHcz9BOxbDQrL4Dvtg&s" alt="user photo"/>
+                        </button>
+                    )
+                }
 
 
                 <div id="dropdownAvatar" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 text-black">
@@ -38,18 +46,26 @@ function Navbar() {
                     <li>
                         <Link to={'/institute/login'} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">My Schools</Link>
                     </li>
-                   
+
                     <li>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Admin Dashboard</a>
+                        <Link to={'/enrolled_courses'} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Enrolled Courses</Link>
                     </li>
+                   
+                     {/* {
+                        JSON.parse(localStorage.getItem('userInfo'))?.role == 'admin' && (
+                             <li>
+                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Admin Dashboard</a>
+                            </li>
+                        )
+                    } */}
                     </ul>
                     <div class="py-2">
-                    <a href="#" class="block px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-black dark:hover:text-white">Sign out</a>
+                    <button className='bg-black w-full text-white py-2 rounded-md mt-5 flex items-center justify-center gap-3 cursor-pointer' onClick={()=>handleSignOut()}><BiLogOut size={20}/> Sign Out</button>
+                    {/* <a href="#" class="block px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-black dark:hover:text-white">Sign out</a> */}
                     </div>
                 </div>
 
 
-                
             </nav>
 
            <div className='inline-block md:hidden'>
@@ -57,10 +73,15 @@ function Navbar() {
                 <CiMenuBurger size={30}/>
             </div>
 
-              <button id="dropdownUserAvatarButton1" data-dropdown-toggle="dropdownAvatar1" class="inline text-sm bg-gray-800 rounded-full md:me-0" type="button">
-                <span class="sr-only">Open user menu</span>
-                <img class="w-8 h-8 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnFRPx77U9mERU_T1zyHcz9BOxbDQrL4Dvtg&s" alt="user photo"/>
-                </button>
+                
+                {
+                    (localStorage.getItem('userInfo') && localStorage.getItem('token')) && (
+                        <button id="dropdownUserAvatarButton1" data-dropdown-toggle="dropdownAvatar1" class="inline text-sm bg-gray-800 rounded-full md:me-0" type="button">
+                        <span class="sr-only">Open user menu</span>
+                        <img class="w-8 h-8 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnFRPx77U9mERU_T1zyHcz9BOxbDQrL4Dvtg&s" alt="user photo"/>
+                        </button>
+                    )
+                }
 
 
                 <div id="dropdownAvatar1" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 text-black">
@@ -75,10 +96,17 @@ function Navbar() {
                     <li>
                         <Link to={'/institute/login'} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">My Schools</Link>
                     </li>
-                 
                     <li>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Admin Dashboard</a>
+                        <Link to={'/enrolled_courses'} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Enrolled Courses</Link>
                     </li>
+
+                    {/* {
+                        JSON.parse(localStorage.getItem('userInfo'))?.role == 'admin' && (
+                             <li>
+                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Admin Dashboard</a>
+                            </li>
+                        )
+                    } */}
                     </ul>
                     <div class="py-2">
                     <a href="#" class="block px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-black dark:hover:text-white">Sign out</a>
@@ -100,6 +128,12 @@ function Navbar() {
                 <Link to={'/courses'}>Courses</Link>
                 <Link to={'/'}>Profile</Link>
             </nav>
+
+            {
+                localStorage.getItem('token') && (
+                    <button className='bg-black text-white py-2 rounded-md mt-5 flex items-center justify-center gap-3 cursor-pointer' onClick={()=>handleSignOut()}><BiLogOut size={20}/> Sign Out</button>
+                )
+            }
         </div>
     </div>
   )

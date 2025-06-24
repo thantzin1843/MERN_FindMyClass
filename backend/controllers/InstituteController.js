@@ -2,6 +2,8 @@ import  jwt  from "jsonwebtoken";
 import Institute from "../models/Institute.js";
 import bcrypt from "bcryptjs";
 import Staff from "../models/Staff.js";
+import Course from "../models/Course.js";
+import Enrolled from "../models/Enrolled.js";
 
 export const signup = async(req, res) =>{
     try {
@@ -115,7 +117,9 @@ export const updateProfile = async (req, res) => {
       address,
       about,
       logo,
-      images
+      images,
+      contact,
+      payments
     } = req.body;
 
     const institute = await Institute.findById(id);
@@ -135,8 +139,9 @@ export const updateProfile = async (req, res) => {
     institute.address = address || institute.address;
     institute.about = about || institute.about;
     institute.logo = logo || institute.logo;
-    institute.images = images || institute.images
-
+    institute.images = images || institute.images;
+    institute.contact = contact || institute.contact;
+    institute.payments = payments || institute.payments;
     const updatedInstitute = await institute.save();
 
     return res.status(200).json({
@@ -215,3 +220,63 @@ export const deleteStaff = async(req, res) =>{
         });
     }
 }
+
+export const getInstitutes = async(req, res) =>{
+    try {
+        const institutes = await Institute.find()
+        res.status(200).json(institutes)
+    } catch (error) {
+      res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message
+    });
+    }
+}
+
+export const getInstituteDetail = async(req, res) =>{
+    try {
+        const {id} = req.params;
+        const institute = await Institute.findById(id);
+        const members = await Staff.find({institute_id:id})
+        const courses = await Course.find({institute_id:id}).populate("instructor")
+        if(!institute){
+            res.status(404).json({
+                "message":"Institute Not Found"
+            })
+        }
+        res.status(200).json({institute,members,courses});
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+// admin change insittute status
+export const changeStatus = async(req, res) =>{
+    try {
+        const {id,status} = req.body;
+        const institute = await Institute.findById(id);
+        if(!institute){
+            res.status(404).json({message:'Institute Not Found'})
+        }
+        institute.status = status;
+        await institute.save();
+       
+        res.status(200).json(institute);
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+
+// 
+// GET /api/enroll/course/:id
+export const getEnrolledByCourse = async (req, res) => {
+  try {
+    const enrollments = await Enrolled.find({ course_id: req.params.course_id })
+                        .populate("user_id") // get student info
+                        .populate("course_id", "name");     // optional: get course name
+    res.status(200).json(enrollments);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};

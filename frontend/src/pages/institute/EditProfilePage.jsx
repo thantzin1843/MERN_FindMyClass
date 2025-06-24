@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import ProfileImageUpload from '../../components/ImageKit/ProfileImageUpload';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LogoUpload from '../../components/ImageKit/LogoUpload';
 import MultipleImageUpload from '../../components/ImageKit/MultipleImageUpload';
+import QrUpload from '../../components/ImageKit/QrUpload';
 
 
 function EditProfilePage() {
@@ -12,7 +13,40 @@ function EditProfilePage() {
   const token = localStorage.getItem('token');
   const [images, setImages] = useState([])
   const [formData, setFormData] = useState({});
-   const [profile,setProfile] = useState("")
+  // contact
+  const [contact, setContact] = useState([])
+  const [contactName, setContactName] = useState("")
+  const [contactLink, setContactLink] = useState("")
+  const handleContactChange = () =>{
+      const alreadyExists = contact.some(c => c.name.toLowerCase() === contactName.toLowerCase());
+      if (alreadyExists) {
+        toast.error("This contact name already exists.");
+        return;
+      }
+      setContact(prev => [...prev, { name: contactName, link: contactLink }]);
+  }
+
+  const deleteContact = (name) =>{
+    const filteredContact = contact?.filter((c)=>c.name != name)
+    setContact(filteredContact);
+  }
+
+  // payment
+  const [payments, setPayments] = useState([])
+  const [paymentName, setPaymentName] = useState("")
+  const [qr, setQr] = useState("")
+  const [receiver, setReceiver] = useState("")
+  const handlePaymentChange = () =>{
+    console.log(payments)
+      setPayments(prev => [...prev, { name: paymentName, qr: qr , receiver:receiver}]);
+  }
+
+  const setPaymentQr = (qr) =>{
+    console.log(qr)
+    setQr(qr);
+  }
+
+  const [profile,setProfile] = useState("")
   const changeProfile = (img) =>{
     setProfile(img)
   }
@@ -40,6 +74,8 @@ function EditProfilePage() {
               setFormData(data);
               setProfile(data?.logo)
               setImages(data?.images)
+              setContact(data?.contact)
+              setPayments(data?.payments)
           } catch (error) {
               console.log(error.message)
           }
@@ -96,8 +132,11 @@ function EditProfilePage() {
           address,
           about,
           logo:profile,
-          images
+          images,
+          contact,
+          payments
     }
+    console.log(payload)
     try {
         const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/institute/updateProfile`,{
           method:'put',
@@ -108,8 +147,11 @@ function EditProfilePage() {
           body:JSON.stringify(payload)
         })
         const data = await res.json();
-        console.log(data)
-        return data;
+        if(res.status == 200){
+          toast.success(data?.message)
+          console.log(data)
+        }
+        toast.error(data.message)
       } catch (error) {
         console.log(error.message)
       }
@@ -215,9 +257,89 @@ function EditProfilePage() {
             />
           </div>
 
+            <table className='w-full '>
+                {
+                    contact?.length > 0 ? (
+                        contact?.map((c,index)=>(
+                            <tr className='' key={index}>
+                                <td className='py-2'>{c.name}</td>
+                                <td className='py-2 underline'>
+                                    <Link to={c.link}>{c.link}</Link>
+                                </td>
+                                <td className='py-2 text-red-500 cursor-pointer' onClick={()=>deleteContact(c.name)}>
+                                  Delete
+                                </td>
+                            </tr>
+                        ))
+                    ) :(
+                        <div>No contact information yet.</div>
+                    )
+                }
+               
+            </table>
+             <div className="grid grid-cols-1 p-2 rounded-md bg-gray-100 lg:grid-cols-2 gap-2 my-5 w-full ">
+              <div>
+                <label className='text-gray-500 text-sm'>Contact Name (eg. Facebook )</label>
+                <input type="text" placeholder='Institute Name'
+                  className="border border-gray-400 p-2 rounded-md w-full"
+                  value={contactName}
+                  onChange={(e)=>setContactName(e.target.value)}
+                  required />
+              </div>
+              <div>
+                  <label className='text-gray-500 text-sm'>Link (eg. Facebook's Link)</label>
+                  <input type="text" placeholder='Institute Name'
+                    className="border border-gray-400 p-2 rounded-md w-full"
+                    value={contactLink}
+                    onChange={(e)=>setContactLink(e.target.value)}
+                    required />
+              </div>
+
+              <button onClick={()=>handleContactChange()} type='button' className='bg-black text-white py-2 rounded-md w-50 '>Add Contact</button>
+             </div>
+
+             <div className=" p-2 rounded-md bg-gray-100 my-5 w-full ">
+              <div>
+                <label className='text-gray-500 text-sm'>Payment Name (eg.KBZpay)</label>
+                <input type="text" placeholder='Payment Name'
+                  className="border border-gray-400 p-2 rounded-md w-full"
+                  value={paymentName}
+                  onChange={(e)=>setPaymentName(e.target.value)}
+                  required />
+              </div>
+              <div className='mt-3'>
+                <label className='text-gray-500 text-sm'>Payment Receiver Name</label>
+                <input type="text" placeholder='Receiver Name'
+                  className="border border-gray-400 p-2 rounded-md w-full"
+                  value={receiver}
+                  onChange={(e)=>setReceiver(e.target.value)}
+                  required />
+              </div>
+              <div className="my-5">
+                <div className="my-3 space-y-3">
+                    
+                  {
+                    payments?.map((payment,index)=>(
+                      <div key={index} className='flex gap-3 items-center '>
+                        <img key={index} src={payment?.qr} className='w-20 border h-20 rounded-md border-gray-500' alt="" />
+                        <div>
+                          <div className='font-bold text-xl '>{payment?.name}</div>
+                          <div>{payment?.receiver}</div>
+                        </div>
+                      </div>
+                    ))
+                  }
+                   
+                </div>
+                <QrUpload setPaymentQr={setPaymentQr}/>
+              </div>
+
+              <button onClick={()=>handlePaymentChange()} type='button' className='bg-black text-white py-2 rounded-md w-50 '>Add Payment</button>
+             </div>
 
 
-          <button type="button" onClick={handleSubmit} className='bg-black text-white  p-2 w-full rounded-md'>Next</button>
+
+          <button type="button" onClick={handleSubmit} className='bg-black text-white  p-2 w-full rounded-md'>Save</button>
       </div>
     </div>
   );

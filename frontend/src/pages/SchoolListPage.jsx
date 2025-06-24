@@ -1,8 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import SchoolCard from '../components/SchoolCard'
 import { FaMagnifyingGlass } from 'react-icons/fa6'
+import { toast } from 'sonner'
 
 function SchoolListPage() {
+    const [institutes, setInstitutes] = useState([])
+       const fetchInstitutes = async() =>{
+           try {
+                const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/institute`);
+                const data = await res.json();
+                console.log(data);
+                setInstitutes(data);
+            } catch (error) {
+               toast.error(error.message)
+            }
+       }
+    
+       useEffect(()=>{
+          fetchInstitutes()
+       },[])
   return (
     <div className='px-10 md:px-20'>
 
@@ -19,8 +35,8 @@ function SchoolListPage() {
         
         <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 space-x-5 space-y-5">
             {
-            [1,2,3,4,4,5,55,5,4,4,4,4].map(()=>(
-                <SchoolCard/>
+            institutes?.map((institute,index)=>(
+                <SchoolCard key={index} institute={institute}/>
             ))
              }
         </div>

@@ -20,6 +20,7 @@ const instituteSchema = new mongoose.Schema({
     unique: true,
   },
   contact: [{name:String,link:String}],
+  payments: [{name:String,qr:String, receiver:String}],
   address: {
     type: String,
     required: true,
@@ -46,7 +47,7 @@ const instituteSchema = new mongoose.Schema({
   role:{
     type:String,
     default:"institute"
-  }
+  },
 }, { timestamps: true });
 
 const Institute = mongoose.models?.Institute || mongoose.model("Institute", instituteSchema);

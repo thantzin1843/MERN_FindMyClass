@@ -54,6 +54,7 @@ function Courses() {
                      <td className='p-2'>Fee(Ks) </td>
                      <td className='p-2'>duration</td>
                      <td className='p-2'>status</td>
+                     <td className='p-2'>Enrolled Students</td>
                      <td className='p-2'>Operation</td>
                   </tr>
                </thead>
@@ -61,7 +62,9 @@ function Courses() {
                   {
                      courses?.map((course,index)=>(
                      <tr key={index}>
-                        <td className='p-2'>{course?.name}</td>
+                        <td className='p-2'>
+                           <Link to={`/institute/courses/${course?._id}`}>{course?.name}</Link>
+                        </td>
                         <td className='p-2'>{new Date(course?.start_date).toLocaleDateString()}</td>
                         <td className='p-2'>{course?.current_fee}</td>
                         <td className='p-2'>{course?.duration}</td>
@@ -69,7 +72,11 @@ function Courses() {
                            <span className='bg-yellow-400 p-1 rounded-full text-xs px-3'>{course?.status}</span>
                         </td>
                         <td className='p-2'>
+                           <Link to={`/institute/courses/${course?._id}/enrolled_students`} className='text-blue-500 underline text-sm'>Enrolled Students</Link>
+                        </td>
+                        <td className='p-2'>
                            <button className='bg-red-600 text-white py-2 px-5 rounded-md text-xs me-2'>Delete</button>
+                           
                            {/* <button className='bg-black text-white py-2 px-5 rounded-md text-xs '>Edit</button> */}
                         </td>
                      </tr>

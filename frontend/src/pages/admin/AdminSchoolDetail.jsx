@@ -2,16 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { BiPhone } from 'react-icons/bi'
 import { CiLocationOn } from 'react-icons/ci'
 import { MdEmail, MdPhoto } from 'react-icons/md'
-import ImageModal from '../components/ImageModal'
-import InstructorModal from '../components/InstructorModal'
 import { BsStar } from 'react-icons/bs'
-import ReviewModal from '../components/ReviewModal'
-import CourseCard from '../components/CourseCard'
 import { toast } from 'sonner'
 import { useParams } from 'react-router-dom'
+import ImageModal from '../../components/ImageModal'
+import InstructorModal from '../../components/InstructorModal'
 
 
-function SchoolDetail() {
+function AdminSchoolDetail() {
     const {id} = useParams();
     const [institute, setInstitute] = useState([])
     const [staffs, setStaffs] = useState([])
@@ -33,7 +31,7 @@ function SchoolDetail() {
           fetchInstitute()
        },[])
   return (
-    <div className='px-5 lg:px-20 '>
+    <div className='px-5 lg:px-40 '>
         <div className="w-full lg:w-2/3 mt-10 mx-auto">
             <img src={institute?.logo} className='w-20 border rounded-full h-20 ' alt="" />
             <div className="flex items-center mb-2 mt-5 gap-5">
@@ -99,50 +97,10 @@ function SchoolDetail() {
 
           </div>
 
-          <div className='mt-5 mb-10 '>
-            <div className='font-bold text-xl mb-5'>Reviews</div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 space-x-10 space-y-10">
-               {
-                [1,2].map(()=>(
-                     <div className='space-y-3'>
-                        <div className="flex items-center gap-3">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTComBxCbdkdSpHqAnQngEPdOckocvxj3fDPQ&s" className='w-[50px] h-[50px] border rounded-full' alt="" />
-                            <div className='text-xl'>
-                                <div>Thant Zin Win</div>
-                                <div className='space-x-1'>{
-                                    [1,2,3,4,5].map(()=><BsStar className='inline '/>)
-                                    } </div>
-                            </div>
-                        </div>
-                        <div>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur voluptas officiis ducimus, odio deserunt, facilis vero excepturi nobis officia neque commodi distinctio veritatis cupiditate sed provident veniam incidunt voluptatibus ab.
-                        </div>
-                    </div>
-                ))
-               }
-
-            </div>
-            <ReviewModal/>
-
-          </div>
-
-          <div className='mt-5 mb-10 '>
-            <div className='font-bold text-xl mb-5'>Courses</div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 space-x-5 space-y-10">
-               {
-                courses?.map((course,index)=>(
-                    <CourseCard key={index} course={course}/>
-                ))
-               }
-
-            </div>
-            
-
-          </div>
         </div>
 
     </div>
   )
 }
 
-export default SchoolDetail
+export default AdminSchoolDetail

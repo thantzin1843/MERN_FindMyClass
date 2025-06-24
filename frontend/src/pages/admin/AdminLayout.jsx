@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
+import AdminNavbar from '../../components/AdminNavbar';
 
 function AdminLayout() {
   const navigate = useNavigate()
@@ -13,9 +14,16 @@ function AdminLayout() {
     if(userInfo && userInfo?.role == "user"){
       navigate('/')
     }
+
+    if(!localStorage.getItem('token')){
+      navigate('/')
+    }
   },[])
+
+  
   return (
     <>
+        <AdminNavbar/>
         <Outlet/>
     </>
   )

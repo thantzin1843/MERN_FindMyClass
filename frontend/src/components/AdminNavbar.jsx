@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import { BiLogOut, BiMenu } from 'react-icons/bi'
 import { Link, useNavigate } from 'react-router-dom'
 
-function InstituteNavbar() {
+function AdminNavbar() {
     const [show, setShow] = useState(false)
-    const navigate = useNavigate()
+     const navigate = useNavigate()
     const handleSignOut = () =>{
       localStorage.removeItem("token")
-      localStorage.removeItem("instituteInfo")
+      localStorage.removeItem("userInfo")
       navigate('/')
     }
   return (
@@ -20,12 +20,8 @@ function InstituteNavbar() {
          <div className='flex p-10 flex-col'>
            <div className='text-3xl '>Find My Class</div>
           <nav className='flex flex-col space-y-5 mt-10'>
-            <Link to={'/institute/dashboard'}>Dashboard</Link>
-            <Link to={'/institute/profile'}>Profile</Link>
-            <Link to={'/institute/members'}>Members</Link>
-            <Link to={'/institute/courses'}>Courses</Link>
-            <Link to={'/institute/reviews'}>Reviews</Link>
-            <Link to={'/'}>Messages</Link>
+            <Link to={'/admin/dashboard'}>Dashboard</Link>
+            <Link to={'/admin/dashboard'}>Institutes</Link>
           </nav>
           <button className='bg-black text-white py-2 rounded-md mt-5 flex items-center justify-center gap-3 cursor-pointer' onClick={()=>handleSignOut()}><BiLogOut size={20}/> Sign Out</button>
          </div>
@@ -34,4 +30,4 @@ function InstituteNavbar() {
   )
 }
 
-export default InstituteNavbar
+export default AdminNavbar

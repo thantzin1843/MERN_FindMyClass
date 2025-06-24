@@ -30,7 +30,7 @@ function CreateCoursePage() {
           fetchMembers(instituteInfo?._id)
        },[])
 
-       const [images, setImages] = useState([])
+        const [images, setImages] = useState([])
         const handleImages =(img)=>{
             setImages((prev)=>{
             if (!prev.includes(img)) {
@@ -114,10 +114,10 @@ function CreateCoursePage() {
       });
 
       const result = await res.json();
-      console.log(result);
+      // console.log(result);
       if(res.status == 201){
         toast.success(result.message)
-        navigate('/insitute/courses')
+        navigate('/institute/courses')
       }
     toast.error(result.message)
       // Show success toast or navigate
@@ -267,7 +267,7 @@ function CreateCoursePage() {
                 }
                 </div>
                 <MultipleImageUpload handleImages={handleImages}/>
-            </div>
+              </div>
 
           <button type="submit" className='bg-black text-white p-2 w-full rounded-md'>Create Course</button>
         </form>
