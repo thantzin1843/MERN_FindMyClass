@@ -221,17 +221,22 @@ export const deleteStaff = async(req, res) =>{
     }
 }
 
-export const getInstitutes = async(req, res) =>{
-    try {
-        const institutes = await Institute.find()
-        res.status(200).json(institutes)
-    } catch (error) {
-      res.status(500).json({
+export const getInstitutes = async (req, res) => {
+  try {
+    const search = req.query.search || "";
+    const searchRegex = new RegExp(search, "i");
+    const institutes = await Institute.find({
+      name: { $regex: searchRegex },
+    //   category: { $regex: searchRegex }
+    });
+    res.status(200).json(institutes);
+  } catch (error) {
+    res.status(500).json({
       message: "Internal Server Error",
       error: error.message
     });
-    }
-}
+  }
+};
 
 export const getInstituteDetail = async(req, res) =>{
     try {

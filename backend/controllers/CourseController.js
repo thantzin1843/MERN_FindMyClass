@@ -65,7 +65,15 @@ export const createCourse = async (req, res) => {
 // for user
 export const getUserCourses = async(req, res) =>{
     try {
-        const courses = await Course.find().populate('instructor').populate('institute_id')
+        const search = req.query.search || "";
+        const searchRegex = new RegExp(search, "i");
+        const courses = await Course.find({
+                        $or: [
+                          { name: { $regex: searchRegex } },
+                          { category: { $regex: searchRegex } },
+                          { about: { $regex: searchRegex } }
+                        ]
+                      }).populate('instructor').populate('institute_id')
         res.status(200).json(courses)
     } catch (error) {
       res.status(500).json({

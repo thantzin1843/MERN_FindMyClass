@@ -36,15 +36,15 @@ function Navbar() {
 
                 <div id="dropdownAvatar" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 text-black">
                     <div class="px-4 py-3 text-sm text-black dark:text-black">
-                    <div>Bonnie Green</div>
-                    <div class="font-medium truncate">name@flowbite.com</div>
+                    <div>{JSON.parse(localStorage.getItem('userInfo')).name}</div>
+                    <div class="font-medium truncate">{JSON.parse(localStorage.getItem('userInfo')).email}</div>
                     </div>
                     <ul class="py-2 text-sm text-black dark:text-black" aria-labelledby="dropdownUserAvatarButton">
                     <li>
                         <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
                     </li>
                     <li>
-                        <Link to={'/institute/login'} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">My Schools</Link>
+                        <Link to={'/institute/login'} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">My School</Link>
                     </li>
 
                     <li>
@@ -94,7 +94,7 @@ function Navbar() {
                         <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
                     </li>
                     <li>
-                        <Link to={'/institute/login'} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">My Schools</Link>
+                        <Link to={'/institute/login'} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">My School</Link>
                     </li>
                     <li>
                         <Link to={'/enrolled_courses'} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Enrolled Courses</Link>

@@ -7,6 +7,7 @@ import instituteRouter from './routes/instituteRoute.js';
 import courseRouter from './routes/courseRoute.js';
 import uploadRouter from './routes/ImageUploadRoute.js';
 import enrolledRouter from './routes/EnrollRoute.js';
+import reviewRouter from './routes/reviewRoute.js';
 
 const app = express();
 dotenv.config()
@@ -19,6 +20,7 @@ app.use('/api/user',userRouter)
 app.use('/api/institute', instituteRouter)
 app.use('/api/course', courseRouter)
 app.use('/api/enroll', enrolledRouter)
+app.use('/api/reviews', reviewRouter)
 
 app.use('/auth',uploadRouter)
 app.listen(port, ()=>{

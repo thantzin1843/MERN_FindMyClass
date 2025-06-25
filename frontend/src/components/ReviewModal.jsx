@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsStar } from 'react-icons/bs'
 import { FcNext, FcPrevious } from 'react-icons/fc'
 import { IoCloseCircle } from 'react-icons/io5'
@@ -22,11 +22,8 @@ const images = [
         text:"four paraggrapeeo "
     },
     
-    
-   
-    // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKel0pE7hVT5oLHvvO86aQgEd3rjJUfjqrAQ&s"
 ]
-function ReviewModal() {
+function ReviewModal({reviews}) {
     const [show, setShow] = useState(false)
   return (
         <div>
@@ -41,21 +38,22 @@ function ReviewModal() {
                  </div>
                     <div className="grid grid-cols-1 lg:grid-cols-3 space-x-5 space-y-10 pb-10">
                     {
-                        [1,2,3,4,4,4,4,4,4,4,].map(()=>(
-                                                <div className='space-y-3'>
-                                                   <div className="flex items-center gap-3">
-                                                       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTComBxCbdkdSpHqAnQngEPdOckocvxj3fDPQ&s" className='w-[50px] h-[50px] border rounded-full' alt="" />
-                                                       <div className='text-xl'>
-                                                           <div>Thant Zin Win</div>
-                                                           <div className='space-x-1'>{
-                                                               [1,2,3,4,5].map(()=><BsStar className='inline '/>)
-                                                               } </div>
-                                                       </div>
-                                                   </div>
-                                                   <div>
-                                                       Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur voluptas officiis ducimus, odio deserunt, facilis vero excepturi nobis officia neque commodi distinctio veritatis cupiditate sed provident veniam incidunt voluptatibus ab.
-                                                   </div>
-                                               </div>
+                        reviews?.map((review)=>(
+                                              <div className='space-y-3'>
+                                                                      <div className="flex items-center gap-3">
+                                                                          <img src={"https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"} className='w-[50px] h-[50px] border rounded-full' alt="" />
+                                                                          <div className='text-xl'>
+                                                                              <div>{review?.user_id?.name}</div>
+                                                                              <div className="text-sm">{review?.user_id?.email}</div>
+                                                                              <div className='space-x-1'>{
+                                                                                  [1,2,3,4,5].map((r)=><BsStar className='inline ' color={r <= review?.rating && 'red'}/>)
+                                                                                  } </div>
+                                                                          </div>
+                                                                      </div>
+                                                                      <div>
+                                                                          {review?.comment}
+                                                                      </div>
+                                                                  </div>
                         ))
                     }
 

@@ -16,6 +16,9 @@ function SchoolDetail() {
     const [institute, setInstitute] = useState([])
     const [staffs, setStaffs] = useState([])
     const [courses, setCourses] = useState([])
+    const [reviews, setReviews] = useState([]);
+    const [loading, setLoading] = useState(true);
+
     const fetchInstitute = async() =>{
            try {
                 const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/institute/user/${id}`);
@@ -28,10 +31,30 @@ function SchoolDetail() {
                toast.error(error.message)
             }
        }
+
+        const fetchReviews = async () => {
+               try {
+                   const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/reviews/${id}`);
+                   const data = await res.json();
+                   console.log(data)
+                   setReviews(data);
+               } catch (error) {
+                   console.error("Failed to fetch reviews:", error.message);
+               } finally {
+                   setLoading(false);
+               }
+               };
+
+            useEffect(()=>{
+                fetchReviews();
+                fetchInstitute()
+            },[])
+       
+           if (loading) return <p>Loading reviews...</p>;
+           if (reviews.length === 0) return <p>No reviews yet.</p>;
     
-       useEffect(()=>{
-          fetchInstitute()
-       },[])
+  
+
   return (
     <div className='px-5 lg:px-20 '>
         <div className="w-full lg:w-2/3 mt-10 mx-auto">
@@ -103,27 +126,29 @@ function SchoolDetail() {
             <div className='font-bold text-xl mb-5'>Reviews</div>
             <div className="grid grid-cols-1 lg:grid-cols-3 space-x-10 space-y-10">
                {
-                [1,2].map(()=>(
+                reviews?.slice(0,2)?.map((review)=>(
                      <div className='space-y-3'>
                         <div className="flex items-center gap-3">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTComBxCbdkdSpHqAnQngEPdOckocvxj3fDPQ&s" className='w-[50px] h-[50px] border rounded-full' alt="" />
+                            <img src={"https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"} className='w-[50px] h-[50px] border rounded-full' alt="" />
                             <div className='text-xl'>
-                                <div>Thant Zin Win</div>
+                                <div>{review?.user_id?.name}</div>
+                                <div className="text-sm">{review?.user_id?.email}</div>
                                 <div className='space-x-1'>{
-                                    [1,2,3,4,5].map(()=><BsStar className='inline '/>)
+                                    [1,2,3,4,5].map((r)=><BsStar className='inline ' color={r <= review?.rating && 'red'}/>)
                                     } </div>
                             </div>
                         </div>
                         <div>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur voluptas officiis ducimus, odio deserunt, facilis vero excepturi nobis officia neque commodi distinctio veritatis cupiditate sed provident veniam incidunt voluptatibus ab.
+                            {review?.comment}
                         </div>
                     </div>
                 ))
                }
 
             </div>
-            <ReviewModal/>
-
+            {
+                reviews?.length > 2 && <ReviewModal reviews={reviews}/>
+            }
           </div>
 
           <div className='mt-5 mb-10 '>

@@ -280,7 +280,7 @@ function EditProfilePage() {
              <div className="grid grid-cols-1 p-2 rounded-md bg-gray-100 lg:grid-cols-2 gap-2 my-5 w-full ">
               <div>
                 <label className='text-gray-500 text-sm'>Contact Name (eg. Facebook )</label>
-                <input type="text" placeholder='Institute Name'
+                <input type="text" placeholder='facebook'
                   className="border border-gray-400 p-2 rounded-md w-full"
                   value={contactName}
                   onChange={(e)=>setContactName(e.target.value)}
@@ -288,7 +288,7 @@ function EditProfilePage() {
               </div>
               <div>
                   <label className='text-gray-500 text-sm'>Link (eg. Facebook's Link)</label>
-                  <input type="text" placeholder='Institute Name'
+                  <input type="text" placeholder='www.facebook.com'
                     className="border border-gray-400 p-2 rounded-md w-full"
                     value={contactLink}
                     onChange={(e)=>setContactLink(e.target.value)}

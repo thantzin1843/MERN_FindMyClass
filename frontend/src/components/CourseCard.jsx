@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 function CourseCard({course}) {
+    console.log(course)
     const navigate = useNavigate()
       function convertTo12Hour(time24) {
             const [hourStr, minute] = time24.split(':');
@@ -46,7 +47,7 @@ function CourseCard({course}) {
                        </div>
 
                        <div className="absolute flex top-0 left-0 justify-between w-full items-center">
-                        <img src={course?.instructor?.logo} className='w-12 h-12' alt="" />
+                        <img src={course?.institute_id?.logo} className='w-12 h-12' alt="" />
         
                        <div className='bg-orange-500 px-2'>
                         {course?.start_date && new Date(course?.start_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '').split(' ').join('-')}
