@@ -16,6 +16,10 @@ app.use(cors())
 const port = process.env.PORT || 9000;
 await connectToDB();
 
+app.get('/',(req,res)=>{
+    res.send("Welcome express")
+})
+
 app.use('/api/user',userRouter)
 app.use('/api/institute', instituteRouter)
 app.use('/api/course', courseRouter)
