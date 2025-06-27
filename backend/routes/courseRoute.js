@@ -1,6 +1,6 @@
 import express from 'express'
 import { instituteOnly, protectAccess, protectInstituteAccess } from '../middlewares/AuthMiddleware.js';
-import { changeCourseStatus, createCourse, getCourseDetail, getCourses, getUserCourses, enroll, getEnrolledCourseForUser } from '../controllers/CourseController.js';
+import { changeCourseStatus, createCourse, getCourseDetail, getCourses, getUserCourses, enroll, getEnrolledCourseForUser, deleteCourseIfNoEnrolled } from '../controllers/CourseController.js';
 
 const courseRouter = express.Router();
 
@@ -11,7 +11,7 @@ courseRouter.get('/:id',getCourseDetail);
 
 // institute
 courseRouter.put('/changeStatus',protectInstituteAccess,instituteOnly,changeCourseStatus);
-
+courseRouter.delete('/:id',protectInstituteAccess,instituteOnly,deleteCourseIfNoEnrolled);
 // enroll
 courseRouter.post('/enroll',protectAccess,enroll)
 courseRouter.get('/enroll_courses/:user_id',protectAccess,getEnrolledCourseForUser)

@@ -16,6 +16,8 @@ function Layout() {
       navigate('/admin/dashboard')
     }
   },[])
+
+
   return (
     <div className="m-0 p-0">
         <Navbar/>

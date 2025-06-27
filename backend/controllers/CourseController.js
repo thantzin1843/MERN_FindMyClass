@@ -221,3 +221,22 @@ export const getEnrolledCourseForUser = async(req,res) =>{
     });
   }
 }
+
+// delete course
+export const deleteCourseIfNoEnrolled = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Check if any student enrolled in this course
+    const enrolledCount = await Enrolled.countDocuments({ course_id: id });
+    if (enrolledCount > 0) {
+      return res.status(400).json({ message: 'Cannot delete course with enrolled students.' });
+    }
+
+    // Delete course if no enrollment
+    await Course.findByIdAndDelete(id);
+    res.status(200).json({ message: 'Course deleted successfully.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};

@@ -18,7 +18,7 @@ function AdminNavbar() {
         <div className={`z-50 fixed top-0 left-0 w-3/5 md:w-1/5 h-screen bg-gray-300 transform transition-transform duration-300 ${show ? 'translate-x-0' : '-translate-x-full'}`}>
         
          <div className='flex p-10 flex-col'>
-           <div className='text-3xl '>Find My Class</div>
+           <div className='text-3xl '>FindMyClass</div>
           <nav className='flex flex-col space-y-5 mt-10'>
             <Link to={'/admin/dashboard'}>Dashboard</Link>
             <Link to={'/admin/dashboard'}>Institutes</Link>

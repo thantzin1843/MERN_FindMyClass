@@ -25,7 +25,7 @@ function InstituteNavbar() {
             <Link to={'/institute/members'}>Members</Link>
             <Link to={'/institute/courses'}>Courses</Link>
             <Link to={'/institute/reviews'}>Reviews</Link>
-            <Link to={'/'}>Messages</Link>
+            {/* <Link to={'/'}>Messages</Link> */}
           </nav>
           <button className='bg-black text-white py-2 rounded-md mt-5 flex items-center justify-center gap-3 cursor-pointer' onClick={()=>handleSignOut()}><BiLogOut size={20}/> Sign Out</button>
          </div>

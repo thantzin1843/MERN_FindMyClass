@@ -4,25 +4,6 @@ import { FcNext, FcPrevious } from 'react-icons/fc'
 import { IoCloseCircle } from 'react-icons/io5'
 import { MdPhoto } from 'react-icons/md'
 
-const images = [
-    {
-        img:"https://www.myanmaritv.com/sites/default/files/styles/news_detail_image/public/051122%20Industrial%20training%20schools%20%20%285%29.jpg?itok=8oR0-Bql",
-        text:"One paraggrapeeo "
-    },
-    {
-        img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrr1j-eS99KSCepNQRaiZkBcGVnfqgj3qseB9gCgq5UA6BBVzEgM-tx_Xfu4BChqAyNBs&usqp=CAU",
-        text:"TWo paraggrapeeo "
-    },
-    {
-        img:"https://educationandtrainingacademy.co.uk/wp-content/uploads/2022/02/Education-and-Training-Academy.jpg",
-        text:"three paraggrapeeo "
-    },
-    {
-        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRzBcReMEv8qfBprHrgLGlrst1P_bGQPG1UA&s",
-        text:"four paraggrapeeo "
-    },
-    
-]
 function ReviewModal({reviews}) {
     const [show, setShow] = useState(false)
   return (

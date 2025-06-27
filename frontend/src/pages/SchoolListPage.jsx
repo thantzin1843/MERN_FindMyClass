@@ -38,14 +38,20 @@ function SchoolListPage() {
             </form>
 
         </div>
-        
-        <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 space-x-5 space-y-5">
-            {
-            institutes?.map((institute,index)=>(
-                <SchoolCard key={index} institute={institute}/>
-            ))
-             }
-        </div>
+        {
+            institutes?.length>0 ? (
+                    <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 space-x-5 space-y-5">
+                        {
+                        institutes?.map((institute,index)=>(
+                            <SchoolCard key={index} institute={institute}/>
+                        ))
+                        }
+                    </div>
+            ):(
+                <div>No institute yet!</div>
+            )
+        }
+       
     </div>
   )
 }

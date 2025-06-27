@@ -86,23 +86,30 @@ function PopularCourses() {
         </div>
 
         {/* Scrollable contents */}
-        <div 
-        onMouseDown={handleMouseDown} 
-        onMouseMove={handleMouseMove} 
-        onMouseUp={handleMouseUpOrLeave}
-        onMouseLeave={handleMouseUpOrLeave}
-         ref={scrollRef} className={`hideIndi container px-5 md:px-12 mx-auto overflow-x-scroll flex space-x-3 relative ${isDragging ? " cursor-grabbing": "cursor-grab"}`}>
-            {
-                courses?.map((course,index)=>(
-                     <CourseCard course={course} key={index}/>
-                ))
-            }
+        {
+            courses?.length > 0 ? (
+                <div 
+                        onMouseDown={handleMouseDown} 
+                        onMouseMove={handleMouseMove} 
+                        onMouseUp={handleMouseUpOrLeave}
+                        onMouseLeave={handleMouseUpOrLeave}
+                        ref={scrollRef} className={`hideIndi container px-5 md:px-12 mx-auto overflow-x-scroll flex space-x-3 relative ${isDragging ? " cursor-grabbing": "cursor-grab"}`}>
+                            {
+                                courses?.map((course,index)=>(
+                                    <CourseCard course={course} key={index}/>
+                                ))
+                            }
 
-            <div className='relative min-w-[100%] sm:min-w-[35%] lg:min-w-[25%] border border-gray-300 bg-gray-200 flex justify-center items-center'>
-                <Link to={'/courses'} className='bg-black py-2 px-5 rounded-md text-white'>Explore!</Link>
-            </div>
-            
-        </div>
+                            <div className='relative min-w-[100%] sm:min-w-[35%] lg:min-w-[25%] border border-gray-300 bg-gray-200 flex justify-center items-center'>
+                                <Link to={'/courses'} className='bg-black py-2 px-5 rounded-md text-white'>Explore!</Link>
+                            </div>
+                            
+                        </div>
+            ):(
+                <div className='text-gray-600 text-md text-center'>No latest course yet!</div>
+            )
+        }
+       
 
         
         

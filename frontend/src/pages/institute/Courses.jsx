@@ -27,6 +27,35 @@ function Courses() {
        useEffect(()=>{
           fetchCourses(instituteInfo?._id)
        },[])
+
+      //  delete the course
+   const handleDelete = async (id) => {
+  const confirmed = window.confirm("Are you sure you want to delete this course?");
+  if (!confirmed) return;
+
+  try {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/course/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    const data = await res.json();
+    console.log(data)
+    if (res.ok) {
+      toast.success("Course deleted successfully");
+      setCourses(prev => prev.filter(course => course._id !== id));
+    } else {
+      toast.error(data.message || "Could not delete the course");
+    }
+  } catch (error) {
+    console.error(error);
+    toast.error("Something went wrong");
+  }
+};
+
   return (
      <div className='px-5 lg:px-45 '>
         <div className="w-full lg:w-3/4 mx-auto">
@@ -75,7 +104,7 @@ function Courses() {
                            <Link to={`/institute/courses/${course?._id}/enrolled_students`} className='text-blue-500 underline text-sm'>Enrolled Students</Link>
                         </td>
                         <td className='p-2'>
-                           <button className='bg-red-600 text-white py-2 px-5 rounded-md text-xs me-2'>Delete</button>
+                           <button onClick={() => handleDelete(course?._id)}  className='bg-red-600 text-white py-2 px-5 rounded-md text-xs me-2'>Delete</button>
                            
                            {/* <button className='bg-black text-white py-2 px-5 rounded-md text-xs '>Edit</button> */}
                         </td>

@@ -47,14 +47,20 @@ function CourseListPage() {
             </form>
 
         </div>
-        
-        <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 space-x-5 space-y-5">
-            {
-                courses?.map((course,index)=>(
-                    <CourseCard course={course} key={index}/>
-                ))
-             }
-        </div>
+        {
+            courses?.length > 0 ? (
+            <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 space-x-5 space-y-5">
+                {
+                    courses?.map((course,index)=>(
+                        <CourseCard course={course} key={index}/>
+                    ))
+                }
+            </div>
+            ):(
+                <div>No course yet!</div>
+            )
+        }
+       
     </div>
   )
 }

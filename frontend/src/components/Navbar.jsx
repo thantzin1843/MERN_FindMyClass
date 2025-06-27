@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BiLogOut } from 'react-icons/bi'
 import { CgProfile } from 'react-icons/cg'
 import { CiMenuBurger } from 'react-icons/ci'
@@ -12,6 +12,7 @@ function Navbar() {
       localStorage.removeItem("userInfo")
       navigate('/')
     }
+
   return (
     <div>
         {/* navbar for desktop */}
@@ -23,21 +24,23 @@ function Navbar() {
                 <Link to={'/'}>Home</Link>
                 <Link to={'/schools'}>Training School</Link>
                 <Link to={'/courses'}>Courses</Link>
-
+                
                 {
-                    (localStorage.getItem('userInfo') && localStorage.getItem('token')) && (
+                    (localStorage.getItem('userInfo') && localStorage.getItem('token')) ? (
                         <button  id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar" class="inline text-sm bg-gray-800 rounded-full md:me-0" type="button">
                         <span class="sr-only">Open user menu</span>
                         <img class="w-8 h-8 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnFRPx77U9mERU_T1zyHcz9BOxbDQrL4Dvtg&s" alt="user photo"/>
                         </button>
+                    ):(
+                        <Link to={'/login'} className='bg-black text-white p-2 rounded-md '>Login</Link>
                     )
                 }
 
 
                 <div id="dropdownAvatar" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 text-black">
                     <div class="px-4 py-3 text-sm text-black dark:text-black">
-                    <div>{JSON.parse(localStorage.getItem('userInfo')).name}</div>
-                    <div class="font-medium truncate">{JSON.parse(localStorage.getItem('userInfo')).email}</div>
+                    <div>{localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).name}</div>
+                    <div class="font-medium truncate">{localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).email}</div>
                     </div>
                     <ul class="py-2 text-sm text-black dark:text-black" aria-labelledby="dropdownUserAvatarButton">
                     <li>
@@ -86,8 +89,8 @@ function Navbar() {
 
                 <div id="dropdownAvatar1" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 text-black">
                     <div class="px-4 py-3 text-sm text-black dark:text-black">
-                    <div>Bonnie Green</div>
-                    <div class="font-medium truncate">name@flowbite.com</div>
+                    <div>{localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).name}</div>
+                    <div class="font-medium truncate">{localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).email}</div>
                     </div>
                     <ul class="py-2 text-sm text-black dark:text-black" aria-labelledby="dropdownUserAvatarButton1">
                     <li>
