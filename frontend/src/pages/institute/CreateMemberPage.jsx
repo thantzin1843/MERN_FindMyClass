@@ -78,7 +78,6 @@ function CreateMember() {
   return (
     <div className='px-5 lg:px-45 '>
       <div className="w-full lg:w-3/4 mx-auto mb-5 mt-5">
-        <MultistepIndicator index={2} />
         <form onSubmit={handleSubmit}>
           <ProfileImageUpload changeProfile={changeProfile}/>
 

@@ -37,7 +37,7 @@ function CourseCard({course}) {
                                 <div className='font-bold'>
                                     {course?.current_fee} Ks
                                 </div>
-                                <div className=' line-through'>
+                                <div className=' line-through text-red-500'>
                                     {course?.original_fee} Ks
                                 </div>
                             </div>
@@ -49,7 +49,7 @@ function CourseCard({course}) {
                        <div className="absolute flex top-0 left-0 justify-between w-full items-center">
                         <img src={course?.institute_id?.logo} className='w-12 h-12' alt="" />
         
-                       <div className='bg-orange-500 px-2'>
+                       <div className='bg-black text-white px-2'>
                         {course?.start_date && new Date(course?.start_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '').split(' ').join('-')}
                        </div>
                        </div>

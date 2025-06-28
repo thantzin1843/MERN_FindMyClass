@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { BiLogOut } from 'react-icons/bi'
 import { CgProfile } from 'react-icons/cg'
 import { CiMenuBurger } from 'react-icons/ci'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 
 function Navbar() {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef();
     const [open, setOpen] = useState(false)
     const navigate = useNavigate()
     const handleSignOut = () =>{
@@ -12,6 +14,16 @@ function Navbar() {
       localStorage.removeItem("userInfo")
       navigate('/')
     }
+
+useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <div>
@@ -26,47 +38,59 @@ function Navbar() {
                 <Link to={'/courses'}>Courses</Link>
                 
                 {
-                    (localStorage.getItem('userInfo') && localStorage.getItem('token')) ? (
-                        <button  id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar" class="inline text-sm bg-gray-800 rounded-full md:me-0" type="button">
-                        <span class="sr-only">Open user menu</span>
-                        <img class="w-8 h-8 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnFRPx77U9mERU_T1zyHcz9BOxbDQrL4Dvtg&s" alt="user photo"/>
-                        </button>
-                    ):(
-                        <Link to={'/login'} className='bg-black text-white p-2 rounded-md '>Login</Link>
-                    )
+                    (localStorage.getItem('userInfo') && localStorage.getItem('token')) ? '' : <Link to={'/login'} className='bg-black text-white p-2 rounded-md '>Login</Link>
                 }
 
 
-                <div id="dropdownAvatar" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 text-black">
-                    <div class="px-4 py-3 text-sm text-black dark:text-black">
-                    <div>{localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).name}</div>
-                    <div class="font-medium truncate">{localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).email}</div>
-                    </div>
-                    <ul class="py-2 text-sm text-black dark:text-black" aria-labelledby="dropdownUserAvatarButton">
-                    <li>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
-                    </li>
-                    <li>
-                        <Link to={'/institute/login'} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">My School</Link>
-                    </li>
+            
 
-                    <li>
-                        <Link to={'/enrolled_courses'} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Enrolled Courses</Link>
-                    </li>
-                   
-                     {/* {
-                        JSON.parse(localStorage.getItem('userInfo'))?.role == 'admin' && (
-                             <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Admin Dashboard</a>
-                            </li>
-                        )
-                    } */}
-                    </ul>
-                    <div class="py-2">
-                    <button className='bg-black w-full text-white py-2 rounded-md mt-5 flex items-center justify-center gap-3 cursor-pointer' onClick={()=>handleSignOut()}><BiLogOut size={20}/> Sign Out</button>
-                    {/* <a href="#" class="block px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-black dark:hover:text-white">Sign out</a> */}
-                    </div>
+                 <div className="relative inline-block text-left" ref={dropdownRef}>
+                <div className={(localStorage.getItem('userInfo') && localStorage.getItem('token')) ? 'block' : 'hidden'}>
+                    <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden focus:outline-none"
+                    >
+                    <img
+                        // src="https://i.pravatar.cc/100" // Replace with user profile URL
+                        src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnFRPx77U9mERU_T1zyHcz9BOxbDQrL4Dvtg&s'
+                        alt="User Avatar"
+                        className="w-full h-full object-cover"
+                    />
+                    </button>
                 </div>
+
+      {isOpen && (
+        <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black/5 z-10">
+            <div class="px-4 py-3 text-sm text-black ">
+                <div className='font-bold'>{localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).name}Thant Zin Win</div>
+                <div class="text-sm truncate">{localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).email}ThantZinwin@gmial.com</div>
+            </div>
+          <div className="py-1">
+            <a
+              href="/"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            >
+              Profile
+            </a>
+             <Link to={'/institute/login'} class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My School</Link>
+               <Link to={'/enrolled_courses'} class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Enrolled Courses</Link>
+               {
+                        JSON.parse(localStorage.getItem('userInfo'))?.role == 'admin' && (
+                             
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Admin Dashboard</a>
+                           
+                        )
+                    } 
+            <button
+              onClick={()=>handleSignOut()}
+              className=" w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center gap-2"
+            >
+             <BiLogOut size={20} /> Logout
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
 
 
             </nav>
@@ -76,44 +100,54 @@ function Navbar() {
                 <CiMenuBurger size={30}/>
             </div>
 
-                
-                {
-                    (localStorage.getItem('userInfo') && localStorage.getItem('token')) && (
-                        <button id="dropdownUserAvatarButton1" data-dropdown-toggle="dropdownAvatar1" class="inline text-sm bg-gray-800 rounded-full md:me-0" type="button">
-                        <span class="sr-only">Open user menu</span>
-                        <img class="w-8 h-8 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnFRPx77U9mERU_T1zyHcz9BOxbDQrL4Dvtg&s" alt="user photo"/>
+
+
+                 <div className="relative inline-block text-left" ref={dropdownRef}>
+                <div className={(localStorage.getItem('userInfo') && localStorage.getItem('token')) ? 'block' : 'hidden'}>
+                    <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden focus:outline-none"
+                    >
+                    <img
+                        // src="https://i.pravatar.cc/100" // Replace with user profile URL
+                        src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnFRPx77U9mERU_T1zyHcz9BOxbDQrL4Dvtg&s'
+                        alt="User Avatar"
+                        className="w-full h-full object-cover"
+                    />
+                    </button>
+                </div>
+
+                {isOpen && (
+                    <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black/5 z-10">
+                        <div class="px-4 py-3 text-sm text-black ">
+                            <div className='font-bold'>{localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).name}Thant Zin Win</div>
+                            <div class="text-sm truncate">{localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).email}ThantZinwin@gmial.com</div>
+                        </div>
+                    <div className="py-1">
+                        <a
+                        href="/"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                        Profile
+                        </a>
+                        <Link to={'/institute/login'} class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My School</Link>
+                        <Link to={'/enrolled_courses'} class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Enrolled Courses</Link>
+                        {
+                                    JSON.parse(localStorage.getItem('userInfo'))?.role == 'admin' && (
+                                        
+                                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Admin Dashboard</a>
+                                    
+                                    )
+                                } 
+                        <button
+                        onClick={()=>handleSignOut()}
+                        className=" w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center gap-2"
+                        >
+                        <BiLogOut size={20} /> Logout
                         </button>
-                    )
-                }
-
-
-                <div id="dropdownAvatar1" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 text-black">
-                    <div class="px-4 py-3 text-sm text-black dark:text-black">
-                    <div>{localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).name}</div>
-                    <div class="font-medium truncate">{localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).email}</div>
                     </div>
-                    <ul class="py-2 text-sm text-black dark:text-black" aria-labelledby="dropdownUserAvatarButton1">
-                    <li>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
-                    </li>
-                    <li>
-                        <Link to={'/institute/login'} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">My School</Link>
-                    </li>
-                    <li>
-                        <Link to={'/enrolled_courses'} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Enrolled Courses</Link>
-                    </li>
-
-                    {/* {
-                        JSON.parse(localStorage.getItem('userInfo'))?.role == 'admin' && (
-                             <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Admin Dashboard</a>
-                            </li>
-                        )
-                    } */}
-                    </ul>
-                    <div class="py-2">
-                    <a href="#" class="block px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-black dark:hover:text-white">Sign out</a>
                     </div>
+                )}
                 </div>
            </div>
         </div>
@@ -133,8 +167,10 @@ function Navbar() {
             </nav>
 
             {
-                localStorage.getItem('token') && (
+                localStorage.getItem('token') ? (
                     <button className='bg-black text-white py-2 rounded-md mt-5 flex items-center justify-center gap-3 cursor-pointer' onClick={()=>handleSignOut()}><BiLogOut size={20}/> Sign Out</button>
+                ):(
+                    <button className='bg-black text-white py-2 rounded-md mt-5 flex items-center justify-center gap-3 cursor-pointer' onClick={()=>navigate('/login')}><BiLogOut size={20}/> Login</button>
                 )
             }
         </div>
@@ -143,3 +179,5 @@ function Navbar() {
 }
 
 export default Navbar
+
+
